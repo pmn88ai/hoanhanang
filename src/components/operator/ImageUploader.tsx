@@ -9,6 +9,8 @@ interface Props {
   maxImages?: number;
 }
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
 export default function ImageUploader({
   images,
   onChange,
@@ -21,22 +23,53 @@ export default function ImageUploader({
     setError("");
     setUploading(true);
 
-    const fd = new FormData();
-    fd.append("file", file);
-
-    const res = await fetch("/api/operator/upload", {
-      method: "POST",
-      body: fd,
-    });
-    const data = await res.json();
-
-    if (!res.ok) {
-      setError(data.message ?? "Khong upload duoc anh");
+    if (file.size > MAX_FILE_SIZE) {
+      setError("Anh qua lon. Vui long chon anh duoi 10MB.");
       setUploading(false);
       return;
     }
 
-    onChange([...images, data.url]);
+    // Step 1: Get signed upload URL from our API
+    let signedUrl: string, publicUrl: string;
+    try {
+      const res = await fetch("/api/operator/upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: file.type }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.message ?? "Khong tao duoc URL upload.");
+        setUploading(false);
+        return;
+      }
+      signedUrl = data.signedUrl;
+      publicUrl = data.publicUrl;
+    } catch {
+      setError("Loi ket noi. Vui long thu lai.");
+      setUploading(false);
+      return;
+    }
+
+    // Step 2: Upload directly to Supabase Storage (bypass Vercel)
+    try {
+      const uploadRes = await fetch(signedUrl, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file,
+      });
+      if (!uploadRes.ok) {
+        setError("Upload that bai. Vui long thu lai.");
+        setUploading(false);
+        return;
+      }
+    } catch {
+      setError("Loi ket noi khi upload. Vui long thu lai.");
+      setUploading(false);
+      return;
+    }
+
+    onChange([...images, publicUrl]);
     setUploading(false);
   };
 
@@ -109,7 +142,7 @@ export default function ImageUploader({
                 <span className="text-cta font-medium">chon anh</span>
               </p>
               <p className="text-text-muted text-xs mt-1">
-                JPG, PNG, WebP — toi da 5MB moi anh
+                JPG, PNG, WebP — toi da 10MB moi anh
               </p>
             </>
           )}
