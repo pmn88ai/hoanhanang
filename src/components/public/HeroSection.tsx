@@ -47,10 +47,10 @@ export default function HeroSection({
         <p className="text-accent text-sm font-medium tracking-widest uppercase mb-4">
           {shopName}
         </p>
-        <h1 className="font-serif text-4xl md:text-6xl font-semibold text-white drop-shadow-lg mb-6 leading-tight">
+        <h1 className="font-serif text-4xl md:text-6xl font-semibold text-deep-wine mb-6 leading-tight">
           {tagline}
         </h1>
-        <p className="text-white/80 text-lg md:text-xl mb-10 leading-relaxed drop-shadow">
+        <p className="text-deep-wine/80 text-lg md:text-xl mb-10 leading-relaxed">
           {subTagline}
         </p>
 

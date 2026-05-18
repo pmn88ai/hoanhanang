@@ -1,5 +1,5 @@
 export default function PublicFooter() {
-  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Flower Store";
+  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
   const phone = process.env.NEXT_PUBLIC_SHOP_PHONE ?? "";
 
   return (
@@ -21,6 +21,12 @@ export default function PublicFooter() {
         </div>
         <div className="border-t border-white/10 mt-8 pt-6 text-xs text-center">
           &copy; {new Date().getFullYear()} {shopName}. All rights reserved.
+          <p className="text-xs text-center mt-2 text-white/50">
+            Thiết kế &amp; triển khai bởi{' '}
+            <span className="font-medium">RongLeo</span>
+            {' · '}
+            <a href="tel:0906899985" className="hover:underline">0906 899 985</a>
+          </p>
         </div>
       </div>
     </footer>

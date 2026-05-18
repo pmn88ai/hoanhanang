@@ -19,7 +19,7 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cửa hàng hoa";
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
 const shopPhone = process.env.NEXT_PUBLIC_SHOP_PHONE ?? "";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 

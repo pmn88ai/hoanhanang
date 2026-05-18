@@ -12,7 +12,7 @@ const NAV_LINKS = [
 export default function PublicHeader() {
   const [open, setOpen] = useState(false);
   const zaloUrl = process.env.NEXT_PUBLIC_ZALO_URL ?? "#";
-  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Flower Store";
+  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
 
   return (
     <header className="sticky top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-dusty-pink/20">
