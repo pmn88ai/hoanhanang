@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { products, siteSettings } from "../../../database/schema";
 import { eq, and } from "drizzle-orm";
@@ -5,6 +6,19 @@ import HeroSection from "@/components/public/HeroSection";
 import FeaturedProducts from "@/components/public/FeaturedProducts";
 import TestimonialsSection from "@/components/public/TestimonialsSection";
 import AboutSection from "@/components/public/AboutSection";
+
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa";
+
+export const metadata: Metadata = {
+  title: "Trang chu",
+  description:
+    "Hoa tuoi dep, giao tan noi. Dat hoa sinh nhat, khai truong, cuoi hoi. Lien he Zalo ngay.",
+  openGraph: {
+    title: `${shopName} — Hoa tuoi dep`,
+    description: "Hoa tuoi, giao tan noi, gia hop ly.",
+    images: ["/og-image.jpg"],
+  },
+};
 
 export default async function HomePage() {
   let settings: Record<string, string> = {};
