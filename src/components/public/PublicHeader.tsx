@@ -11,17 +11,22 @@ const NAV_LINKS = [
 
 export default function PublicHeader() {
   const [open, setOpen] = useState(false);
+  const [logoFailed, setLogoFailed] = useState(false);
   const zaloUrl = process.env.NEXT_PUBLIC_ZALO_URL ?? "#";
   const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
+  const logoPath = process.env.NEXT_PUBLIC_LOGO_PATH || "/logo.png";
 
   return (
     <header className="sticky top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-dusty-pink/20">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link
-          href="/"
-          className="font-serif text-xl text-deep-wine font-semibold"
-        >
-          {shopName}
+        <Link href="/">
+          {logoPath && !logoFailed ? (
+            <img src={logoPath} alt={shopName} width={120} height={40}
+              className="h-10 w-auto object-contain"
+              onError={() => setLogoFailed(true)} />
+          ) : (
+            <span className="font-serif text-xl text-deep-wine font-semibold">{shopName}</span>
+          )}
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
