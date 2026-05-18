@@ -10,6 +10,7 @@ const defaults = [
   },
   { key: "hero_image_url", value: "" },
   { key: "hero_video_url", value: "" },
+  { key: "ai_system_prompt", value: "" },
   {
     key: "shop_description",
     value:
