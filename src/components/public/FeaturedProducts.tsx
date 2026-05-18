@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { fmtPrice } from "@/lib/utils";
 
 interface Product {
   id: string;
@@ -64,7 +65,7 @@ export default function FeaturedProducts({ products }: Props) {
                 </h3>
                 {product.priceRange && (
                   <p className="text-cta text-sm font-semibold">
-                    {product.priceRange}
+                    {fmtPrice(product.priceRange)}
                   </p>
                 )}
               </div>

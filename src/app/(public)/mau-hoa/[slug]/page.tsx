@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Phone, ChevronLeft } from "lucide-react";
 import ImageGallery from "@/components/public/ImageGallery";
 import VideoEmbed from "@/components/public/VideoEmbed";
+import { fmtPrice } from "@/lib/utils";
 
 export const revalidate = 60;
 
@@ -150,7 +151,7 @@ export default async function ProductPage({ params }: Props) {
               {product.title}
             </h1>
             {product.priceRange && (
-              <p className="text-2xl text-cta font-bold mb-6">{product.priceRange}</p>
+              <p className="text-2xl text-cta font-bold mb-6">{fmtPrice(product.priceRange)}</p>
             )}
             {product.description && (
               <div className="text-text-muted text-sm leading-relaxed mb-8 whitespace-pre-line">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { products } from "../../../../database/schema";
 import { eq, and } from "drizzle-orm";
+import { fmtPrice } from "@/lib/utils";
 import CategoryFilter from "@/components/public/CategoryFilter";
 import type { Metadata } from "next";
 
@@ -115,7 +116,7 @@ export default async function GalleryPage({ searchParams }: Props) {
                   </h2>
                   {product.priceRange && (
                     <p className="text-cta text-sm font-semibold mt-1">
-                      {product.priceRange}
+                      {fmtPrice(product.priceRange)}
                     </p>
                   )}
                 </div>
