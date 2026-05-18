@@ -1,10 +1,10 @@
 export const CATEGORIES = [
-  { value: "tat-ca", label: "Tat ca" },
-  { value: "sinh-nhat", label: "Sinh nhat" },
-  { value: "khai-truong", label: "Khai truong" },
-  { value: "cuoi-hoi", label: "Cuoi hoi" },
-  { value: "chia-buon", label: "Chia buon" },
-  { value: "tang-le", label: "Tang le" },
-  { value: "tinh-yeu", label: "Tinh yeu" },
-  { value: "qua-tang", label: "Qua tang" },
+  { value: "tat-ca", label: "Tất cả" },
+  { value: "sinh-nhat", label: "Sinh nhật" },
+  { value: "khai-truong", label: "Khai trương" },
+  { value: "cuoi-hoi", label: "Cưới hỏi" },
+  { value: "chia-buon", label: "Chia buồn" },
+  { value: "tang-le", label: "Tang lễ" },
+  { value: "tinh-yeu", label: "Tình yêu" },
+  { value: "qua-tang", label: "Quà tặng" },
 ] as const;

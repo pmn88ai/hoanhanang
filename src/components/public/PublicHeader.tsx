@@ -6,7 +6,7 @@ import { Menu, X, Phone } from "lucide-react";
 const NAV_LINKS = [
   { href: "/", label: "Trang chủ" },
   { href: "/mau-hoa", label: "Mẫu hoa" },
-  { href: "/lien-he", label: "Liện hệ" },
+  { href: "/lien-he", label: "Liên hệ" },
 ];
 
 export default function PublicHeader() {
@@ -70,7 +70,7 @@ export default function PublicHeader() {
             className="flex items-center gap-2 bg-deep-wine text-white text-sm px-4 py-3 rounded-xl justify-center"
           >
             <Phone size={14} />
-            Nhăn Zalo
+            Nhắn Zalo
           </a>
         </div>
       )}

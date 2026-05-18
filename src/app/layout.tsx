@@ -19,18 +19,18 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa";
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cửa hàng hoa";
 const shopPhone = process.env.NEXT_PUBLIC_SHOP_PHONE ?? "";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${shopName} | Hoa tuoi dep`,
+    default: `${shopName} | Hoa tươi đẹp`,
     template: `%s | ${shopName}`,
   },
-  description: `${shopName} — Hoa tuoi, hoa sinh nhat, hoa khai truong, hoa cuoi. Dat hoa qua Zalo, giao tan noi.`,
-  keywords: ["hoa tuoi", "hoa sinh nhat", "hoa khai truong", "dat hoa", shopName],
+  description: `${shopName} — Hoa tươi, hoa sinh nhật, hoa khai trương, hoa cưới. Đặt hoa qua Zalo, giao tận nơi.`,
+  keywords: ["hoa tươi", "hoa sinh nhật", "hoa khai trương", "đặt hoa", shopName],
   openGraph: {
     type: "website",
     locale: "vi_VN",

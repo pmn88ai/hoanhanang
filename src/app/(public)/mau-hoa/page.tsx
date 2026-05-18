@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Mau hoa",
   description:
-    "Kham pha cac mau hoa tuoi dep — sinh nhat, khai truong, cuoi hoi, qua tang. Dat hoa qua Zalo, giao tan noi.",
+    "Khám phá các mẫu hoa tươi đẹp — sinh nhật, khai trương, cưới hỏi, quà tặng. Đặt hoa qua Zalo, giao tận nơi.",
 };
 
 interface Props {
@@ -59,13 +59,13 @@ export default async function GalleryPage({ searchParams }: Props) {
         {/* Header */}
         <div className="text-center mb-10">
           <p className="text-accent text-sm font-medium tracking-widest uppercase mb-2">
-            Bo suu tap
+            Bộ sưu tập
           </p>
           <h1 className="font-serif text-3xl md:text-4xl text-text-primary font-semibold">
-            Tat ca mau hoa
+            Tất cả mẫu hoa
           </h1>
           <p className="text-text-muted mt-3">
-            {allProducts.length} mau hoa dang co san
+            {allProducts.length} mẫu hoa đang có sẵn
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export default async function GalleryPage({ searchParams }: Props) {
         {allProducts.length === 0 ? (
           <div className="text-center py-20 text-text-muted">
             <p className="text-4xl mb-4">🌸</p>
-            <p>Chua co mau hoa nao trong danh muc nay</p>
+            <p>Chưa có mẫu hoa nào trong danh mục này</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
@@ -102,13 +102,13 @@ export default async function GalleryPage({ searchParams }: Props) {
                   )}
                   {product.isFeatured && (
                     <span className="absolute top-2 left-2 bg-cta text-cta-text text-xs px-2 py-0.5 rounded-full font-medium">
-                      Noi bat
+                      Nổi bật
                     </span>
                   )}
                 </div>
                 <div className="p-3 md:p-4">
                   <p className="text-xs text-accent mb-1">
-                    {product.category ?? "Hoa tuoi"}
+                    {product.category ?? "Hoa tươi"}
                   </p>
                   <h2 className="text-text-primary text-sm font-medium line-clamp-2 leading-snug">
                     {product.title}

@@ -23,13 +23,13 @@ export default function FeaturedProducts({ products }: Props) {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <p className="text-accent text-sm font-medium tracking-widest uppercase mb-2">
-            Bo suu tap
+            Bộ sưu tập
           </p>
           <h2 className="font-serif text-3xl md:text-4xl text-text-primary font-semibold">
             Mau hoa noi bat
           </h2>
           <p className="text-text-muted mt-3 text-base">
-            Duoc khach hang yeu thich nhat thang nay
+            Được khách hàng yêu thích nhất tháng này
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function FeaturedProducts({ products }: Props) {
               </div>
               <div className="p-4">
                 <p className="text-xs text-accent font-medium mb-1">
-                  {product.category ?? "Hoa tuoi"}
+                  {product.category ?? "Hoa tươi"}
                 </p>
                 <h3 className="text-text-primary font-medium text-sm leading-snug mb-2 line-clamp-2">
                   {product.title}
@@ -77,7 +77,7 @@ export default function FeaturedProducts({ products }: Props) {
             href="/mau-hoa"
             className="inline-flex items-center gap-2 text-cta font-medium hover:gap-3 transition-all text-sm"
           >
-            Xem tat ca mau hoa
+            Xem tất cả mẫu hoa
             <ArrowRight size={16} />
           </Link>
         </div>

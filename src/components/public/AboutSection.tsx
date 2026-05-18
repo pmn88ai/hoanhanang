@@ -17,14 +17,14 @@ export default function AboutSection({
   phone,
   zaloUrl,
   googleMapsEmbedUrl,
-  openHours = "7:00 - 20:00 moi ngay",
+  openHours = "7:00 - 20:00 mỗi ngày",
 }: Props) {
   return (
     <section className="py-20 px-4 bg-bg-secondary">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <p className="text-accent text-sm font-medium tracking-widest uppercase mb-2">
-            Ve chung toi
+            Về chúng tôi
           </p>
           <h2 className="font-serif text-3xl md:text-4xl text-text-primary font-semibold">
             {shopName}
@@ -47,7 +47,7 @@ export default function AboutSection({
                 </div>
                 <div>
                   <p className="text-text-primary font-medium text-sm mb-1">
-                    Dia chi
+                    Địa chỉ
                   </p>
                   <p className="text-text-muted text-sm leading-relaxed">
                     {address}
@@ -63,7 +63,7 @@ export default function AboutSection({
                 </div>
                 <div>
                   <p className="text-text-primary font-medium text-sm mb-1">
-                    Dien thoai / Zalo
+                    Điện thoại / Zalo
                   </p>
                   <a
                     href={`tel:${phone}`}
@@ -81,7 +81,7 @@ export default function AboutSection({
               </div>
               <div>
                 <p className="text-text-primary font-medium text-sm mb-1">
-                  Gio mo cua
+                   Giờ mở cửa
                 </p>
                 <p className="text-text-muted text-sm">{openHours}</p>
               </div>
@@ -96,7 +96,7 @@ export default function AboutSection({
                   className="flex items-center justify-center gap-2 bg-cta text-cta-text px-6 py-3 rounded-xl text-sm font-medium hover:opacity-90 transition"
                 >
                   <Phone size={15} />
-                  Nhan Zalo dat hoa
+                  Nhắn Zalo đặt hoa
                 </a>
               )}
             </div>
@@ -112,7 +112,7 @@ export default function AboutSection({
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title={`Ban do ${shopName}`}
+                title={`                    Bản đồ ${shopName}`}
               />
             </div>
           )}

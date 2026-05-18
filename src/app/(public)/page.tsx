@@ -7,15 +7,15 @@ import FeaturedProducts from "@/components/public/FeaturedProducts";
 import TestimonialsSection from "@/components/public/TestimonialsSection";
 import AboutSection from "@/components/public/AboutSection";
 
-const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa";
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cửa hàng hoa";
 
 export const metadata: Metadata = {
   title: "Trang chu",
   description:
-    "Hoa tuoi dep, giao tan noi. Dat hoa sinh nhat, khai truong, cuoi hoi. Lien he Zalo ngay.",
+    "Hoa tươi đẹp, giao tận nơi. Đặt hoa sinh nhật, khai trương, cưới hỏi. Liên hệ Zalo ngay.",
   openGraph: {
-    title: `${shopName} — Hoa tuoi dep`,
-    description: "Hoa tuoi, giao tan noi, gia hop ly.",
+    title: `${shopName} — Hoa tươi đẹp`,
+    description: "Hoa tươi, giao tận nơi, giá hợp lý.",
     images: ["/og-image.jpg"],
   },
 };
@@ -60,11 +60,11 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection
-        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa"}
-        tagline={settings["hero_tagline"] ?? "Hoa tuoi - Cam xuc that"}
+        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cửa hàng hoa"}
+        tagline={settings["hero_tagline"] ?? "Hoa tươi - Cảm xúc thật"}
         subTagline={
           settings["hero_sub_tagline"] ??
-          "Moi bo hoa la mot cau chuyen"
+          "Mỗi bó hoa là một câu chuyện"
         }
         heroImageUrl={settings["hero_image_url"]}
         heroVideoUrl={settings["hero_video_url"]}
@@ -74,7 +74,7 @@ export default async function HomePage() {
       <FeaturedProducts products={featuredProducts} />
       <TestimonialsSection />
       <AboutSection
-        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa"}
+        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cửa hàng hoa"}
         description={settings["shop_description"]}
         address={process.env.NEXT_PUBLIC_SHOP_ADDRESS}
         phone={process.env.NEXT_PUBLIC_SHOP_PHONE}

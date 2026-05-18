@@ -13,8 +13,8 @@ interface HeroSectionProps {
 
 export default function HeroSection({
   shopName,
-  tagline = 'Hoa tuoi - Cam xuc that',
-  subTagline = 'Moi bo hoa la mot cau chuyen. Chung toi giup ban ke cau chuyen do.',
+  tagline = 'Hoa tươi - Cảm xúc thật',
+  subTagline = 'Mỗi bó hoa là một câu chuyện. Chúng tôi giúp bạn kể câu chuyện đó.',
   heroImageUrl,
   heroVideoUrl,
   zaloUrl,
@@ -40,7 +40,7 @@ export default function HeroSection({
           <div className="absolute inset-0 bg-black/30" />
         </div>
       ) : (
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-dusty-pink/40 via-cream to-champagne/60" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-dusty-pink/20 via-cream/90 to-champagne/40" />
       )}
 
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
@@ -62,7 +62,7 @@ export default function HeroSection({
             className="flex items-center justify-center gap-2 bg-cta text-cta-text px-8 py-4 rounded-2xl text-base font-semibold hover:opacity-90 transition shadow-lg"
           >
             <Phone size={18} />
-            Nhan Zalo ngay
+            Nhắn Zalo ngay
           </a>
           {facebookUrl && (
             <a
@@ -72,7 +72,7 @@ export default function HeroSection({
               className="flex items-center justify-center gap-2 bg-white/20 backdrop-blur text-white border border-white/30 px-8 py-4 rounded-2xl text-base hover:bg-white/30 transition"
             >
               <MessageCircle size={18} />
-              Nhan Facebook
+              Nhắn Facebook
             </a>
           )}
         </div>

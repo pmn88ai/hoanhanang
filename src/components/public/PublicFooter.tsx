@@ -8,15 +8,15 @@ export default function PublicFooter() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <p className="font-serif text-white text-lg mb-2">{shopName}</p>
-            <p className="text-sm">Hoa tăi — Quà tăng ý nghăa</p>
+            <p className="text-sm">Hoa tươi — Quà tặng ý nghĩa</p>
           </div>
           <div>
-            <p className="text-white text-sm font-medium mb-2">Liện hệ</p>
+            <p className="text-white text-sm font-medium mb-2">Liên hệ</p>
             <p className="text-sm">{phone}</p>
           </div>
           <div>
-            <p className="text-white text-sm font-medium mb-2">Giổ làm việc</p>
-            <p className="text-sm">7:00 - 20:00 mđi ngày</p>
+            <p className="text-white text-sm font-medium mb-2">Giờ làm việc</p>
+            <p className="text-sm">7:00 - 20:00 mỗi ngày</p>
           </div>
         </div>
         <div className="border-t border-white/10 mt-8 pt-6 text-xs text-center">

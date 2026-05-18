@@ -7,24 +7,24 @@ interface Testimonial {
 
 const DEFAULT_TESTIMONIALS: Testimonial[] = [
   {
-    name: "Chi Lan",
+    name: "Chị Lan",
     content:
-      "Shop lam hoa rat dep va giao nhanh. Minh dat hoa sinh nhat cho ban than, ban rat thich. Se ung ho thuong xuyen!",
-    occasion: "Hoa sinh nhat",
+      "Shop làm hoa rất đẹp và giao nhanh. Mình đặt hoa sinh nhật cho bạn thân, bạn rất thích. Sẽ ủng hộ thường xuyên!",
+    occasion: "Hoa sinh nhật",
     rating: 5,
   },
   {
     name: "Anh Minh",
     content:
-      "Dat hoa khai truong cho van phong moi, shop tu van nhiet tinh lam. Hoa tuoi dep, gia hop ly, rat hai long.",
-    occasion: "Hoa khai truong",
+      "Đặt hoa khai trương cho văn phòng mới, shop tư vấn nhiệt tình lắm. Hoa tươi đẹp, giá hợp lý, rất hài lòng.",
+    occasion: "Hoa khai trương",
     rating: 5,
   },
   {
-    name: "Chi Huong",
+    name: "Chị Hương",
     content:
-      "Hoa cuoi lam dung tone mau nhu minh yeu cau. Team rat chuyen nghiep va chu dao. Cam on shop nhieu!",
-    occasion: "Hoa cuoi",
+      "Hoa cưới làm đúng tone màu như mình yêu cầu. Team rất chuyên nghiệp và chu đáo. Cảm ơn shop nhiều!",
+    occasion: "Hoa cưới",
     rating: 5,
   },
 ];
@@ -39,10 +39,10 @@ export default function TestimonialsSection({
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <p className="text-accent text-sm font-medium tracking-widest uppercase mb-2">
-            Phan hoi
+            Phản hồi
           </p>
           <h2 className="font-serif text-3xl md:text-4xl text-text-primary font-semibold">
-            Khach hang noi gi?
+            Khách hàng nói gì?
           </h2>
         </div>
 
