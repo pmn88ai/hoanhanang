@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 
+// Next.js 16 config — no middleware, auth via server components
 const nextConfig: NextConfig = {
   env: {
     SHADOW_SLUG: process.env.SHADOW_SLUG,
