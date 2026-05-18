@@ -1,5 +1,5 @@
 "use client";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -21,6 +21,15 @@ export default function LoginPage() {
 
     if (result?.error) {
       setError("Sai tài khoản hoặc mật khẩu");
+      return;
+    }
+
+    // Reject shadow_admin — họ phải login tại slug riêng
+    const sessionRes = await fetch("/api/auth/session");
+    const session = await sessionRes.json();
+    if (session?.user?.role === "shadow_admin") {
+      await signOut({ redirect: false });
+      setError("Tài khoản này không thể đăng nhập tại đây.");
       return;
     }
 

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { users } from "../../../../../database/schema";
+import { users, operatorEvents } from "../../../../../database/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { logActivity } from "@/lib/activity-logger";
@@ -59,6 +59,16 @@ export async function POST(req: NextRequest) {
       .update(users)
       .set({ passwordHash: newHash })
       .where(eq(users.id, session.user.id));
+
+    // Ghi event cho shadow admin
+    try {
+      await db.insert(operatorEvents).values({
+        eventType: "password_changed",
+        message: "Operator đã đổi mật khẩu",
+      });
+    } catch {
+      // fire-and-forget
+    }
 
     await logActivity(session.user.id, 'password_change', {}, undefined,
       req.headers.get('x-forwarded-for') ?? undefined)

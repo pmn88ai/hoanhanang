@@ -34,6 +34,25 @@ const FIELDS = [
   },
 ];
 
+const LOGO_FIELDS = [
+  {
+    key: "logo_width",
+    label: "Chiều rộng logo (px)",
+    type: "number",
+    min: 80,
+    max: 300,
+    placeholder: "160",
+  },
+  {
+    key: "logo_height",
+    label: "Chiều cao logo (px)",
+    type: "number",
+    min: 32,
+    max: 120,
+    placeholder: "48",
+  },
+];
+
 const ENV_FIELDS = [
   { key: "zalo", label: "Zalo URL", note: "Cap nhat trong file .env" },
   {
@@ -88,6 +107,26 @@ export default function ShopSettingsForm({
       <h2 className="text-base font-semibold text-text-primary">
         Noi dung hien thi
       </h2>
+
+      <div className="bg-bg-secondary rounded-xl p-4 space-y-4">
+        <p className="text-sm font-medium text-text-primary">Logo &amp; Thương hiệu</p>
+        {LOGO_FIELDS.map((field) => (
+          <div key={field.key}>
+            <label className={labelClass}>{field.label}</label>
+            <input
+              type={field.type}
+              min={field.min}
+              max={field.max}
+              value={settings[field.key] ?? ""}
+              onChange={(e) =>
+                setSettings((s) => ({ ...s, [field.key]: e.target.value }))
+              }
+              className={inputClass}
+              placeholder={field.placeholder}
+            />
+          </div>
+        ))}
+      </div>
 
       {FIELDS.map((field) => (
         <div key={field.key}>

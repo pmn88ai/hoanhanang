@@ -1,5 +1,5 @@
 import {
-  pgTable, text, varchar, boolean, integer,
+  pgTable, text, varchar, boolean, integer, serial,
   timestamp, jsonb, uuid, pgEnum,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
@@ -81,6 +81,14 @@ export const siteSettings = pgTable("site_settings", {
   value: text("value"),
   updatedBy: varchar("updated_by", { length: 50 }).notNull().default("system"),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// ===== OPERATOR EVENTS (cảnh báo cho shadow) =====
+export const operatorEvents = pgTable("operator_events", {
+  id: serial("id").primaryKey(),
+  eventType: text("event_type").notNull(),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 // ===== OPERATOR ACTIVITY LOG =====

@@ -1,5 +1,5 @@
 import { db } from '@/lib/db'
-import { operatorActivity, users } from '../../../../../database/schema'
+import { operatorActivity, operatorEvents, users } from '../../../../../database/schema'
 import { desc, eq } from 'drizzle-orm'
 
 const ACTION_LABELS: Record<string, string> = {
@@ -23,10 +23,16 @@ export default async function OperatorLogPage() {
     createdAt: Date
     userEmail: string | null
   }> = []
+  let events: Array<{
+    id: number
+    eventType: string
+    message: string
+    createdAt: Date
+  }> = []
 
   try {
-    activities = await db
-      .select({
+    const [acts, evts] = await Promise.all([
+      db.select({
         id: operatorActivity.id,
         action: operatorActivity.action,
         targetId: operatorActivity.targetId,
@@ -35,10 +41,17 @@ export default async function OperatorLogPage() {
         createdAt: operatorActivity.createdAt,
         userEmail: users.email,
       })
-      .from(operatorActivity)
-      .leftJoin(users, eq(operatorActivity.userId, users.id))
-      .orderBy(desc(operatorActivity.createdAt))
-      .limit(200)
+        .from(operatorActivity)
+        .leftJoin(users, eq(operatorActivity.userId, users.id))
+        .orderBy(desc(operatorActivity.createdAt))
+        .limit(200),
+      db.select()
+        .from(operatorEvents)
+        .orderBy(desc(operatorEvents.createdAt))
+        .limit(50),
+    ])
+    activities = acts
+    events = evts
   } catch {
     // DB unavailable
   }
@@ -48,6 +61,25 @@ export default async function OperatorLogPage() {
       <h1 className="text-sm font-mono text-gray-400 mb-6">
         {'// operator_activity'} ({activities.length})
       </h1>
+
+      {/* Operator events (cảnh báo cho shadow admin) */}
+      {events.length > 0 && (
+        <div className="mb-8 space-y-1">
+          <p className="text-xs font-mono text-gray-500 mb-2">{'// events'}</p>
+          {events.map(evt => (
+            <div key={evt.id}
+              className="flex items-start gap-4 py-2 px-3 rounded-lg bg-yellow-900/10 border border-yellow-900/20 font-mono text-xs">
+              <span className="text-yellow-400">⚠️</span>
+              <span className="text-yellow-300/80 font-medium">
+                {evt.message}
+              </span>
+              <span className="text-yellow-600/60 flex-shrink-0 ml-auto">
+                {new Date(evt.createdAt).toLocaleString('vi-VN')}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="space-y-1">
         {activities.map(act => {

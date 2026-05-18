@@ -8,16 +8,22 @@ export async function middleware(req: NextRequest) {
   const SHADOW_SLUG = process.env.SHADOW_SLUG ?? "shadow-admin";
   const OPERATOR_PREFIX = "/quan-ly";
 
-  // Shadow admin routes
+  // Shadow admin routes — nếu chưa auth, pass through để layout hiển thị form login
   if (pathname.startsWith(`/${SHADOW_SLUG}`)) {
-    if (token?.role !== "shadow_admin") {
-      return NextResponse.redirect(new URL("/dang-nhap", req.url));
+    if (!token) {
+      return NextResponse.next();
+    }
+    if (token.role !== "shadow_admin") {
+      return NextResponse.redirect(new URL("/quan-ly", req.url));
     }
     return NextResponse.next();
   }
 
-  // Operator routes
+  // Operator routes — shadow_admin không được vào
   if (pathname.startsWith(OPERATOR_PREFIX)) {
+    if (token?.role === "shadow_admin") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
     if (!token) {
       return NextResponse.redirect(new URL("/dang-nhap", req.url));
     }

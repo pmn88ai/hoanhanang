@@ -3,8 +3,8 @@ import { db } from "../src/lib/db";
 import { users } from "./schema";
 
 async function seedOperator() {
-  const email = "operator@shop.com";
-  const password = "ChangeMe123!";
+  const email = process.env.OPERATOR_DEFAULT_EMAIL || "HoaNhaNang";
+  const password = process.env.OPERATOR_DEFAULT_PASSWORD || "1234AbcD";
 
   const hash = await bcrypt.hash(password, 12);
 
@@ -14,7 +14,7 @@ async function seedOperator() {
       email,
       passwordHash: hash,
       role: "operator",
-      name: "Chủ cửa hàng",
+      name: "Quản lý shop",
       isActive: true,
     })
     .onConflictDoNothing();

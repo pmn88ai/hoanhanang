@@ -1,11 +1,19 @@
 "use client";
 import { useState } from "react";
 
-export default function PublicFooter() {
+export default function PublicFooter({
+  logoWidth,
+  logoHeight,
+}: {
+  logoWidth?: number
+  logoHeight?: number
+}) {
   const [logoFailed, setLogoFailed] = useState(false);
   const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
   const phone = process.env.NEXT_PUBLIC_SHOP_PHONE ?? "";
   const logoPath = process.env.NEXT_PUBLIC_LOGO_PATH || "/logo.png";
+  const lw = logoWidth ?? 84;
+  const lh = logoHeight ?? 28;
 
   return (
     <footer className="bg-charcoal text-white/70 mt-20">
@@ -13,8 +21,9 @@ export default function PublicFooter() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             {logoPath && !logoFailed ? (
-              <img src={logoPath} alt={shopName} width={84} height={28}
-                className="h-7 w-auto object-contain mb-2"
+              <img src={logoPath} alt={shopName} width={lw} height={lh}
+                className="object-contain mb-2"
+                style={{ width: lw, height: lh }}
                 onError={() => setLogoFailed(true)} />
             ) : (
               <p className="font-serif text-white text-lg mb-2">{shopName}</p>

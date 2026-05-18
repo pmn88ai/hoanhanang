@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth'
 import { notFound } from 'next/navigation'
 import { signOut } from '@/lib/auth'
 import ShadowNav from '@/components/shadow/ShadowNav'
+import ShadowLoginForm from '@/components/shadow/ShadowLoginForm'
 
 export default async function ShadowLayout({
   children,
@@ -13,13 +14,18 @@ export default async function ShadowLayout({
   const { shadowSlug } = await params
   const session = await auth()
 
-  if (!session || session.user.role !== 'shadow_admin') {
-    notFound()
-  }
-
   const expectedSlug = process.env.SHADOW_SLUG
   if (shadowSlug !== expectedSlug) {
     notFound()
+  }
+
+  // Chưa auth — hiển thị form login ngay tại slug
+  if (!session || session.user.role !== 'shadow_admin') {
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <ShadowLoginForm />
+      </div>
+    )
   }
 
   return (
