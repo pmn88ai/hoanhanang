@@ -58,7 +58,9 @@ export default function ProductActions({ productId, status, isSoldOut }: Props) 
         <MoreVertical size={16} />
       </button>
       {open && (
-        <div className="absolute right-0 top-8 z-20 bg-bg-card border border-border-color rounded-xl shadow-lg py-1 min-w-[180px]">
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 top-9 z-20 bg-bg-card border border-border-color rounded-xl shadow-lg py-1 min-w-[180px]">
           <Link
             href={`/quan-ly/mau-hoa/${productId}/sua`}
             className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-primary hover:bg-bg-secondary transition"
@@ -94,6 +96,7 @@ export default function ProductActions({ productId, status, isSoldOut }: Props) 
             Xoa
           </button>
         </div>
+        </>
       )}
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">

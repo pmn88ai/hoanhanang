@@ -1,10 +1,18 @@
-import Image from "next/image";
 import { db } from "@/lib/db";
 import { products } from "../../../../../database/schema";
 import { desc, isNull, isNotNull } from "drizzle-orm";
 import Link from "next/link";
 import ProductActions from "@/components/operator/ProductActions";
+import ProductThumb from "@/components/operator/ProductThumb";
 import { Plus, Trash2 } from "lucide-react";
+
+function fmtPrice(raw: string | null): string {
+  if (!raw) return "Chưa có giá";
+  const cleaned = raw.trim();
+  if (/^\d+$/.test(cleaned))
+    return Number(cleaned).toLocaleString("vi-VN") + "đ";
+  return cleaned;
+}
 
 export default async function ManageProductsPage() {
   let allProducts: Array<{
@@ -88,21 +96,15 @@ export default async function ManageProductsPage() {
           </Link>
         </div>
       ) : (
-        <div className="bg-bg-card rounded-2xl border border-border-color overflow-hidden">
+        <div className="bg-bg-card rounded-2xl border border-border-color">
           {allProducts.map((product, i) => (
             <div
               key={product.id}
               className={`flex items-center gap-4 p-4 ${i < allProducts.length - 1 ? "border-b border-border-color" : ""}`}
             >
-              <div className="w-12 h-12 rounded-xl bg-bg-secondary flex-shrink-0 overflow-hidden relative">
+              <div className="w-12 h-12 rounded-xl bg-bg-secondary flex-shrink-0 overflow-hidden">
                 {product.images[0] ? (
-                  <Image
-                    src={product.images[0]}
-                    alt={product.title}
-                    fill
-                    className="object-cover"
-                    sizes="48px"
-                  />
+                  <ProductThumb src={product.images[0]} alt={product.title} />
                 ) : (
                   <span className="w-full h-full flex items-center justify-center text-xl">
                     🌸
@@ -114,8 +116,8 @@ export default async function ManageProductsPage() {
                   {product.title}
                 </p>
                 <p className="text-text-muted text-xs">
-                  {product.category ?? "Chua phan loai"} &middot;{" "}
-                  {product.priceRange ?? "Chua co gia"}
+                  {product.category ?? "Chưa phân loại"} &middot;{" "}
+                  {fmtPrice(product.priceRange)}
                 </p>
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
