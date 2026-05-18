@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    nodeMiddleware: true,
-  },
   env: {
     SHADOW_SLUG: process.env.SHADOW_SLUG,
   },
