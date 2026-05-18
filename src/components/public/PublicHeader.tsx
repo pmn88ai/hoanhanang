@@ -21,17 +21,16 @@ export default function PublicHeader({
   const zaloUrl = process.env.NEXT_PUBLIC_ZALO_URL ?? "#";
   const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
   const logoPath = process.env.NEXT_PUBLIC_LOGO_PATH || "/logo.png";
-  const lw = logoWidth ?? 120;
-  const lh = logoHeight ?? 40;
+  const logoH = logoHeight ?? parseInt(process.env.NEXT_PUBLIC_LOGO_HEIGHT ?? '64', 10);
 
   return (
     <header className="sticky top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-dusty-pink/20">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
         <Link href="/">
           {logoPath && !logoFailed ? (
-            <img src={logoPath} alt={shopName} width={lw} height={lh}
-              className="object-contain"
-              style={{ width: lw, height: lh }}
+            <img src={logoPath} alt={shopName}
+              className="w-auto object-contain"
+              style={{ height: logoH }}
               onError={() => setLogoFailed(true)} />
           ) : (
             <span className="font-serif text-xl text-deep-wine font-semibold">{shopName}</span>
@@ -43,7 +42,7 @@ export default function PublicHeader({
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-charcoal hover:text-deep-wine transition"
+              className="text-2xl text-charcoal hover:text-deep-wine transition"
             >
               {link.label}
             </Link>
