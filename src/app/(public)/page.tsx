@@ -4,6 +4,7 @@ import { eq, and } from "drizzle-orm";
 import HeroSection from "@/components/public/HeroSection";
 import FeaturedProducts from "@/components/public/FeaturedProducts";
 import TestimonialsSection from "@/components/public/TestimonialsSection";
+import AboutSection from "@/components/public/AboutSection";
 
 export default async function HomePage() {
   let settings: Record<string, string> = {};
@@ -58,6 +59,14 @@ export default async function HomePage() {
       />
       <FeaturedProducts products={featuredProducts} />
       <TestimonialsSection />
+      <AboutSection
+        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa"}
+        description={settings["shop_description"]}
+        address={process.env.NEXT_PUBLIC_SHOP_ADDRESS}
+        phone={process.env.NEXT_PUBLIC_SHOP_PHONE}
+        zaloUrl={process.env.NEXT_PUBLIC_ZALO_URL}
+        googleMapsEmbedUrl={process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_URL}
+      />
     </>
   );
 }

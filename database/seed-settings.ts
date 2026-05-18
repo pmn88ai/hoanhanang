@@ -10,7 +10,11 @@ const defaults = [
   },
   { key: "hero_image_url", value: "" },
   { key: "hero_video_url", value: "" },
-  { key: "shop_description", value: "" },
+  {
+    key: "shop_description",
+    value:
+      "Chung toi mang den nhung bo hoa tuoi dep nhat voi tinh yeu va su cham chut tung bong.",
+  },
 ];
 
 for (const s of defaults) {
