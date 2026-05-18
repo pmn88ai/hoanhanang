@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { db } from "@/lib/db";
 import { products } from "../../database/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const publishedProducts = await db
       .select({ slug: products.slug, updatedAt: products.updatedAt })
       .from(products)
-      .where(eq(products.status, "published"));
+      .where(and(eq(products.status, "published"), eq(products.isSoldOut, false)));
 
     productUrls = publishedProducts.map((p) => ({
       url: `${siteUrl}/mau-hoa/${p.slug}`,

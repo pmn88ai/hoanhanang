@@ -22,8 +22,8 @@ export default async function GalleryPage({ searchParams }: Props) {
 
   const where =
     category && category !== "tat-ca"
-      ? and(eq(products.status, "published"), eq(products.category, category))
-      : eq(products.status, "published");
+      ? and(eq(products.status, "published"), eq(products.category, category), eq(products.isSoldOut, false))
+      : and(eq(products.status, "published"), eq(products.isSoldOut, false));
 
   let allProducts: Array<{
     id: string;

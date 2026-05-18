@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { products } from "../../../../../database/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Phone, ChevronLeft } from "lucide-react";
@@ -19,7 +19,7 @@ export async function generateStaticParams() {
     const publishedProducts = await db
       .select({ slug: products.slug })
       .from(products)
-      .where(eq(products.status, "published"));
+      .where(and(eq(products.status, "published"), eq(products.isSoldOut, false)));
 
     return publishedProducts.map((p) => ({ slug: p.slug }));
   } catch {
@@ -81,7 +81,7 @@ export default async function ProductPage({ params }: Props) {
     // DB unavailable during build
   }
 
-  if (!product || product.status !== "published") {
+  if (!product || product.status !== "published" || product.isSoldOut) {
     notFound();
   }
 

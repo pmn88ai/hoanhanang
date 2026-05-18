@@ -47,7 +47,7 @@ export default async function HomePage() {
         })
         .from(products)
         .where(
-          and(eq(products.isFeatured, true), eq(products.status, "published"))
+          and(eq(products.isFeatured, true), eq(products.status, "published"), eq(products.isSoldOut, false))
         )
         .limit(8),
     ]);

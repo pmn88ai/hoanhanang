@@ -5,6 +5,10 @@ import { slugify } from "@/lib/slug";
 import { logActivity } from "@/lib/activity-logger";
 import { NextRequest, NextResponse } from "next/server";
 
+function isValidUuid(id: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+}
+
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session)
@@ -28,7 +32,7 @@ export async function POST(req: NextRequest) {
         images: body.images ?? [],
         seoTitle: body.seoTitle || null,
         seoDescription: body.seoDescription || null,
-        createdBy: session.user.id,
+        createdBy: isValidUuid(session.user.id) ? session.user.id : null,
       })
       .returning();
 

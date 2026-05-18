@@ -37,7 +37,9 @@ export const products = pgTable("products", {
   isFeatured: boolean("is_featured").notNull().default(false),
   seoTitle: varchar("seo_title", { length: 70 }),
   seoDescription: varchar("seo_description", { length: 160 }),
+  isSoldOut: boolean("is_sold_out").notNull().default(false),
   createdBy: uuid("created_by").references(() => users.id),
+  deletedAt: timestamp("deleted_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

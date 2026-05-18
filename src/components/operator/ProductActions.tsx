@@ -7,15 +7,18 @@ import {
   Eye,
   EyeOff,
   MoreVertical,
+  Package,
+  PackageOpen,
 } from "lucide-react";
 import Link from "next/link";
 
 interface Props {
   productId: string;
   status: string;
+  isSoldOut: boolean;
 }
 
-export default function ProductActions({ productId, status }: Props) {
+export default function ProductActions({ productId, status, isSoldOut }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,6 +27,14 @@ export default function ProductActions({ productId, status }: Props) {
   const toggleStatus = async () => {
     setLoading(true);
     await fetch(`/api/operator/products/${productId}/toggle`, { method: "PATCH" });
+    router.refresh();
+    setLoading(false);
+    setOpen(false);
+  };
+
+  const toggleSoldOut = async () => {
+    setLoading(true);
+    await fetch(`/api/operator/products/${productId}/sold-out`, { method: "PATCH" });
     router.refresh();
     setLoading(false);
     setOpen(false);
@@ -47,7 +58,7 @@ export default function ProductActions({ productId, status }: Props) {
         <MoreVertical size={16} />
       </button>
       {open && (
-        <div className="absolute right-0 top-8 z-20 bg-bg-card border border-border-color rounded-xl shadow-lg py-1 min-w-[160px]">
+        <div className="absolute right-0 top-8 z-20 bg-bg-card border border-border-color rounded-xl shadow-lg py-1 min-w-[180px]">
           <Link
             href={`/quan-ly/mau-hoa/${productId}/sua`}
             className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-primary hover:bg-bg-secondary transition"
@@ -68,6 +79,14 @@ export default function ProductActions({ productId, status }: Props) {
             {status === "published" ? "An bai" : "Hien bai"}
           </button>
           <button
+            onClick={toggleSoldOut}
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-primary hover:bg-bg-secondary transition w-full"
+          >
+            {isSoldOut ? <PackageOpen size={14} /> : <Package size={14} />}
+            {isSoldOut ? "Danh dau con hang" : "Danh dau het hang"}
+          </button>
+          <button
             onClick={() => setConfirmDelete(true)}
             className="flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-bg-secondary transition w-full"
           >
@@ -83,8 +102,7 @@ export default function ProductActions({ productId, status }: Props) {
               Xac nhan xoa
             </h3>
             <p className="text-text-muted text-sm mb-6">
-              Ban co chac muon xoa mau hoa nay khong? Hanh dong nay khong the
-              hoan tac.
+              Mau hoa se duoc chuyen vao thung rac. Ban co the khoi phuc sau.
             </p>
             <div className="flex gap-3">
               <button

@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { db } from "@/lib/db";
 import { products } from "../../../../../database/schema";
-import { desc } from "drizzle-orm";
+import { desc, isNull, isNotNull } from "drizzle-orm";
 import Link from "next/link";
 import ProductActions from "@/components/operator/ProductActions";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 export default async function ManageProductsPage() {
   let allProducts: Array<{
@@ -15,23 +15,36 @@ export default async function ManageProductsPage() {
     images: string[];
     category: string | null;
     status: string;
+    isSoldOut: boolean;
     createdAt: Date;
   }> = [];
 
+  let trashCount = 0;
+
   try {
-    allProducts = await db
-      .select({
-        id: products.id,
-        slug: products.slug,
-        title: products.title,
-        priceRange: products.priceRange,
-        images: products.images,
-        category: products.category,
-        status: products.status,
-        createdAt: products.createdAt,
-      })
-      .from(products)
-      .orderBy(desc(products.createdAt));
+    const [rows, trashRows] = await Promise.all([
+      db
+        .select({
+          id: products.id,
+          slug: products.slug,
+          title: products.title,
+          priceRange: products.priceRange,
+          images: products.images,
+          category: products.category,
+          status: products.status,
+          isSoldOut: products.isSoldOut,
+          createdAt: products.createdAt,
+        })
+        .from(products)
+        .where(isNull(products.deletedAt))
+        .orderBy(desc(products.createdAt)),
+      db
+        .select({ id: products.id })
+        .from(products)
+        .where(isNotNull(products.deletedAt)),
+    ]);
+    allProducts = rows;
+    trashCount = trashRows.length;
   } catch {
     // DB unavailable
   }
@@ -40,13 +53,27 @@ export default async function ManageProductsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-text-primary">Mau hoa</h1>
-        <Link
-          href="/quan-ly/mau-hoa/them-moi"
-          className="flex items-center gap-2 bg-cta text-cta-text px-4 py-2.5 rounded-xl text-sm font-medium hover:opacity-90 transition"
-        >
-          <Plus size={16} />
-          Them mau moi
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/quan-ly/mau-hoa/thung-rac"
+            className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text-primary transition"
+          >
+            <Trash2 size={14} />
+            Thung rac
+            {trashCount > 0 && (
+              <span className="bg-red-100 text-red-700 text-xs px-1.5 py-0.5 rounded-full font-medium min-w-[18px] text-center">
+                {trashCount}
+              </span>
+            )}
+          </Link>
+          <Link
+            href="/quan-ly/mau-hoa/them-moi"
+            className="flex items-center gap-2 bg-cta text-cta-text px-4 py-2.5 rounded-xl text-sm font-medium hover:opacity-90 transition"
+          >
+            <Plus size={16} />
+            Them mau moi
+          </Link>
+        </div>
       </div>
 
       {allProducts.length === 0 ? (
@@ -92,6 +119,11 @@ export default async function ManageProductsPage() {
                 </p>
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
+                {product.isSoldOut && (
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">
+                    Het hang
+                  </span>
+                )}
                 <span
                   className={`text-xs px-2 py-0.5 rounded-full ${
                     product.status === "published"
@@ -104,6 +136,7 @@ export default async function ManageProductsPage() {
                 <ProductActions
                   productId={product.id}
                   status={product.status}
+                  isSoldOut={product.isSoldOut}
                 />
               </div>
             </div>

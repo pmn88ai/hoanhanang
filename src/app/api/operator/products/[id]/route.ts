@@ -6,6 +6,10 @@ import { eq } from "drizzle-orm";
 import { logActivity } from "@/lib/activity-logger";
 import { NextRequest, NextResponse } from "next/server";
 
+function isValidUuid(id: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+}
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -72,8 +76,11 @@ export async function DELETE(
     return NextResponse.json({ message: "Chua dang nhap" }, { status: 401 });
 
   try {
-    await db.delete(products).where(eq(products.id, id));
-    await logActivity(session.user.id, 'product_delete', {}, id,
+    await db
+      .update(products)
+      .set({ deletedAt: new Date() })
+      .where(eq(products.id, id));
+    await logActivity(session.user.id, 'product_soft_delete', {}, id,
       req.headers.get('x-forwarded-for') ?? undefined)
     return NextResponse.json({ success: true });
   } catch {
