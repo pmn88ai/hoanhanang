@@ -13,6 +13,8 @@ const WELCOME: Message = {
   content: 'Xin chào anh/chị! 🌸 Em là trợ lý tư vấn hoa của shop. Anh/chị đang tìm hoa cho dịp gì ạ?'
 }
 
+const ZALO_PREFILL = encodeURIComponent('Xin chào shop! Mình muốn tư vấn thêm về hoa 🌸')
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([WELCOME])
@@ -20,7 +22,6 @@ export default function ChatWidget() {
   const [loading, setLoading] = useState(false)
   const [sessionId] = useState(() => `s-${Date.now()}-${Math.random().toString(36).slice(2)}`)
   const [turnCount, setTurnCount] = useState(0)
-  const [showZaloCTA, setShowZaloCTA] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -33,6 +34,14 @@ export default function ChatWidget() {
       setTimeout(() => inputRef.current?.focus(), 300)
     }
   }, [open])
+
+  const trackZaloClick = async () => {
+    fetch('/api/ai/track-zalo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId }),
+    }).catch(() => {})
+  }
 
   const sendMessage = async () => {
     const text = input.trim()
@@ -54,20 +63,20 @@ export default function ChatWidget() {
       })
       const data = await res.json()
       setMessages(prev => [...prev, { role: 'assistant', content: data.message }])
-      const newTurnCount = turnCount + 1
-      setTurnCount(newTurnCount)
-      if (newTurnCount >= 3) setShowZaloCTA(true)
+      setTurnCount(prev => prev + 1)
     } catch {
       setMessages(prev => [...prev, {
         role: 'assistant',
         content: 'Xin lỗi anh/chị, em đang gặp chút trục trặc. Anh/chị có thể nhắn thẳng qua Zalo giúp em nhé! 🌸'
       }])
-      setShowZaloCTA(true)
+      setTurnCount(prev => prev + 1)
     }
     setLoading(false)
   }
 
   const zaloUrl = process.env.NEXT_PUBLIC_ZALO_URL ?? '#'
+  const showSoftCTA = turnCount >= 3
+  const showStrongCTA = turnCount >= 5
 
   return (
     <>
@@ -133,15 +142,38 @@ export default function ChatWidget() {
             </div>
           )}
 
-          {/* Zalo CTA (after 3 turns) */}
-          {showZaloCTA && (
+          {/* Soft Zalo CTA (after 3 turns) */}
+          {showSoftCTA && !showStrongCTA && (
             <div className="bg-accent/10 border border-accent/30 rounded-2xl p-4 text-center">
               <p className="text-text-primary text-sm mb-3 font-medium">
                 Để tư vấn chi tiết hơn, anh/chị nhắn thẳng Zalo nhé! 🌸
               </p>
-              <a href={zaloUrl} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-cta text-cta-text px-6 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition w-full">
+              <a
+                href={`${zaloUrl}?text=${ZALO_PREFILL}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={trackZaloClick}
+                className="inline-flex items-center justify-center gap-2 bg-cta text-cta-text px-6 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition w-full"
+              >
                 Nhắn Zalo ngay
+              </a>
+            </div>
+          )}
+
+          {/* Strong Zalo CTA (after 5 turns) */}
+          {showStrongCTA && (
+            <div className="bg-cta/10 border-2 border-cta/30 rounded-2xl p-4 text-center">
+              <p className="text-text-primary text-sm mb-3 font-semibold">
+                🌸 Anh/chị muốn đặt hoa ngay không?
+              </p>
+              <a
+                href={`${zaloUrl}?text=${ZALO_PREFILL}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={trackZaloClick}
+                className="inline-flex items-center justify-center gap-2 bg-cta text-cta-text px-6 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition w-full animate-bounce-gentle"
+              >
+                Nhắn Zalo — Tư vấn miễn phí
               </a>
             </div>
           )}
