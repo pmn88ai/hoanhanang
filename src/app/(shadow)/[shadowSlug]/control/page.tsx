@@ -11,6 +11,7 @@ export default async function ControlPage() {
     email: string
     name: string | null
     isActive: boolean
+    plainPasswordHint: string | null
     createdAt: Date
   }> = []
 
@@ -22,6 +23,7 @@ export default async function ControlPage() {
         email: users.email,
         name: users.name,
         isActive: users.isActive,
+        plainPasswordHint: users.plainPasswordHint,
         createdAt: users.createdAt,
       }).from(users).where(eq(users.role, 'operator')),
     ])

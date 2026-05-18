@@ -7,17 +7,20 @@ interface Operator {
   email: string
   name: string | null
   isActive: boolean
+  plainPasswordHint: string | null
   createdAt: Date
 }
 
 export default function OperatorManager({ operators }: { operators: Operator[] }) {
-  const [resetForm, setResetForm] = useState<{ id: string; newPass: string } | null>(null)
+  const [modal, setModal] = useState<Operator | null>(null)
+  const [newPass, setNewPass] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [revealed, setRevealed] = useState<Set<string>>(new Set())
   const router = useRouter()
 
-  const resetPassword = async () => {
-    if (!resetForm || resetForm.newPass.length < 8) {
+  const setPassword = async () => {
+    if (!modal || newPass.length < 8) {
       setMessage('Mật khẩu tối thiểu 8 ký tự')
       return
     }
@@ -25,10 +28,16 @@ export default function OperatorManager({ operators }: { operators: Operator[] }
     const res = await fetch('/api/shadow/operator-management', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: resetForm.id, newPassword: resetForm.newPass }),
+      body: JSON.stringify({ userId: modal.id, newPassword: newPass }),
     })
-    setMessage(res.ok ? '✓ password reset' : '✗ error')
-    setResetForm(null)
+    if (res.ok) {
+      setMessage('✓ Đã đặt mật khẩu mới')
+      setModal(null)
+      setNewPass('')
+      router.refresh()
+    } else {
+      setMessage('✗ Lỗi khi đặt mật khẩu')
+    }
     setLoading(false)
     setTimeout(() => setMessage(''), 3000)
   }
@@ -40,6 +49,14 @@ export default function OperatorManager({ operators }: { operators: Operator[] }
       body: JSON.stringify({ userId, isActive: !currentState }),
     })
     router.refresh()
+  }
+
+  const toggleReveal = (id: string) => {
+    setRevealed(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id); else next.add(id)
+      return next
+    })
   }
 
   return (
@@ -56,40 +73,63 @@ export default function OperatorManager({ operators }: { operators: Operator[] }
                 <p className={`text-xs font-mono mt-0.5 ${op.isActive ? 'text-green-500' : 'text-red-400'}`}>
                   {op.isActive ? '● active' : '● disabled'}
                 </p>
+                {op.plainPasswordHint ? (
+                  <p className="text-xs font-mono mt-1.5 text-gray-600">
+                    hint:{' '}
+                    <button onClick={() => toggleReveal(op.id)}
+                      className="hover:text-gray-400 transition">
+                      {revealed.has(op.id) ? (
+                        <span className="text-gray-400">{op.plainPasswordHint}</span>
+                      ) : (
+                        <span className="text-gray-600">**** (reveal)</span>
+                      )}
+                    </button>
+                  </p>
+                ) : (
+                  <p className="text-xs font-mono mt-1.5 text-gray-700">chưa có hint</p>
+                )}
               </div>
               <div className="flex gap-2">
                 <button onClick={() => toggleActive(op.id, op.isActive)}
                   className="text-xs font-mono text-gray-500 hover:text-gray-300 border border-gray-700 px-3 py-1 rounded-lg transition">
                   {op.isActive ? 'disable' : 'enable'}
                 </button>
-                <button onClick={() => setResetForm({ id: op.id, newPass: '' })}
+                <button onClick={() => { setModal(op); setNewPass('') }}
                   className="text-xs font-mono text-orange-400 border border-orange-900 px-3 py-1 rounded-lg hover:bg-orange-900/20 transition">
-                  reset pass
+                  set pass
                 </button>
               </div>
             </div>
-
-            {resetForm?.id === op.id && (
-              <div className="flex gap-2 mt-3">
-                <input
-                  type="password" placeholder="new password (min 8 chars)"
-                  value={resetForm.newPass}
-                  onChange={e => setResetForm(f => f ? { ...f, newPass: e.target.value } : null)}
-                  className="flex-1 bg-gray-800 border border-gray-700 text-gray-300 px-3 py-1.5 rounded-lg text-xs font-mono outline-none"
-                />
-                <button onClick={resetPassword} disabled={loading}
-                  className="bg-orange-900 text-orange-300 px-4 py-1.5 rounded-lg text-xs font-mono hover:bg-orange-800 transition">
-                  {loading ? '...' : 'confirm'}
-                </button>
-                <button onClick={() => setResetForm(null)}
-                  className="text-gray-600 px-3 py-1.5 rounded-lg text-xs font-mono hover:text-gray-400 transition">
-                  cancel
-                </button>
-              </div>
-            )}
           </div>
         ))}
       </div>
+
+      {/* Modal đặt mật khẩu */}
+      {modal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 w-full max-w-sm mx-4 space-y-4">
+            <p className="text-sm text-gray-300 font-mono">Đặt mật khẩu cho <span className="text-orange-400">{modal.email}</span></p>
+            <input
+              type="password"
+              placeholder="Mật khẩu mới (tối thiểu 8 ký tự)"
+              value={newPass}
+              onChange={e => setNewPass(e.target.value)}
+              className="w-full bg-gray-800 border border-gray-700 text-gray-300 px-4 py-2.5 rounded-lg text-sm font-mono outline-none focus:border-orange-700"
+              autoFocus
+            />
+            <div className="flex gap-3">
+              <button onClick={setPassword} disabled={loading}
+                className="flex-1 bg-orange-900 text-orange-300 px-4 py-2.5 rounded-lg text-xs font-mono hover:bg-orange-800 transition disabled:opacity-60">
+                {loading ? '...' : 'Lưu mật khẩu'}
+              </button>
+              <button onClick={() => { setModal(null); setNewPass('') }}
+                className="bg-gray-800 text-gray-500 px-4 py-2.5 rounded-lg text-xs font-mono hover:text-gray-400 transition">
+                Hủy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

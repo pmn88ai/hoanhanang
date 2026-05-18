@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  env: {
+    SHADOW_SLUG: process.env.SHADOW_SLUG,
+  },
   images: {
     remotePatterns: [
       {

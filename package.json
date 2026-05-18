@@ -7,11 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-    "db:seed-operator": "npx tsx database/seed-operator.ts",
-    "db:seed-settings": "npx tsx database/seed-settings.ts"
+    "db:generate": "node --env-file=.env.local node_modules/drizzle-kit/bin.cjs generate",
+    "db:push": "node --env-file=.env.local node_modules/drizzle-kit/bin.cjs push",
+    "db:studio": "node --env-file=.env.local node_modules/drizzle-kit/bin.cjs studio",
+    "db:seed-operator": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs database/seed-operator.ts",
+    "db:seed-settings": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs database/seed-settings.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
