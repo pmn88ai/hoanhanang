@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { products } from "../../../../../../../database/schema";
 import { eq } from "drizzle-orm";
+import { logActivity } from "@/lib/activity-logger";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -34,6 +35,9 @@ export async function PATCH(
       .update(products)
       .set({ status: newStatus })
       .where(eq(products.id, id));
+
+    await logActivity(session.user.id, newStatus === 'published' ? 'product_publish' : 'product_unpublish',
+      { productId: id }, id, req.headers.get('x-forwarded-for') ?? undefined)
 
     return NextResponse.json({ status: newStatus });
   } catch {

@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { products } from "../../../../../../database/schema";
 import { slugify } from "@/lib/slug";
 import { eq } from "drizzle-orm";
+import { logActivity } from "@/lib/activity-logger";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
@@ -43,6 +44,9 @@ export async function PUT(
       );
     }
 
+    await logActivity(session.user.id, 'product_update', { title: body.title, slug }, id,
+      req.headers.get('x-forwarded-for') ?? undefined)
+
     return NextResponse.json(product);
   } catch (err: unknown) {
     if ((err as { code?: string })?.code === "23505") {
@@ -69,6 +73,8 @@ export async function DELETE(
 
   try {
     await db.delete(products).where(eq(products.id, id));
+    await logActivity(session.user.id, 'product_delete', {}, id,
+      req.headers.get('x-forwarded-for') ?? undefined)
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(

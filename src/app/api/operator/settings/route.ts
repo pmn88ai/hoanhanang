@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { siteSettings } from "../../../../../database/schema";
+import { logActivity } from "@/lib/activity-logger";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest) {
@@ -21,6 +22,9 @@ export async function PUT(req: NextRequest) {
           set: { value, updatedBy: session.user.email ?? "operator" },
         });
     }
+
+    await logActivity(session.user.id, 'settings_update', { updatedKeys: Object.keys(body) }, undefined,
+      req.headers.get('x-forwarded-for') ?? undefined)
 
     return NextResponse.json({ success: true });
   } catch {

@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { products } from "../../../../../database/schema";
 import { slugify } from "@/lib/slug";
+import { logActivity } from "@/lib/activity-logger";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -30,6 +31,9 @@ export async function POST(req: NextRequest) {
         createdBy: session.user.id,
       })
       .returning();
+
+    await logActivity(session.user.id, 'product_create', { title: body.title, slug }, product.id,
+      req.headers.get('x-forwarded-for') ?? undefined)
 
     return NextResponse.json(product);
   } catch (err: unknown) {

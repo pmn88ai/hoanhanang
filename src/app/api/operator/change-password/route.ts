@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { users } from "../../../../../database/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import { logActivity } from "@/lib/activity-logger";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -58,6 +59,9 @@ export async function POST(req: NextRequest) {
       .update(users)
       .set({ passwordHash: newHash })
       .where(eq(users.id, session.user.id));
+
+    await logActivity(session.user.id, 'password_change', {}, undefined,
+      req.headers.get('x-forwarded-for') ?? undefined)
 
     return NextResponse.json({ success: true });
   } catch {
