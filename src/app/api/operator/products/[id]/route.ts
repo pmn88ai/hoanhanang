@@ -1,0 +1,78 @@
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { products } from "../../../../../../database/schema";
+import { slugify } from "@/lib/slug";
+import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const session = await auth();
+  if (!session)
+    return NextResponse.json({ message: "Chua dang nhap" }, { status: 401 });
+
+  const body = await req.json();
+  const slug = slugify(body.title);
+
+  try {
+    const [product] = await db
+      .update(products)
+      .set({
+        slug,
+        title: body.title,
+        category: body.category || null,
+        priceRange: body.priceRange || null,
+        description: body.description || null,
+        videoUrl: body.videoUrl || null,
+        isFeatured: body.isFeatured ?? false,
+        status: body.status ?? "draft",
+        seoTitle: body.seoTitle || null,
+        seoDescription: body.seoDescription || null,
+      })
+      .where(eq(products.id, id))
+      .returning();
+
+    if (!product) {
+      return NextResponse.json(
+        { message: "Khong tim thay mau hoa." },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(product);
+  } catch (err: unknown) {
+    if ((err as { code?: string })?.code === "23505") {
+      return NextResponse.json(
+        { message: "Ten mau hoa nay da ton tai. Vui long chon ten khac." },
+        { status: 409 }
+      );
+    }
+    return NextResponse.json(
+      { message: "Co loi xay ra. Vui long thu lai." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const session = await auth();
+  if (!session)
+    return NextResponse.json({ message: "Chua dang nhap" }, { status: 401 });
+
+  try {
+    await db.delete(products).where(eq(products.id, id));
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json(
+      { message: "Co loi xay ra. Vui long thu lai." },
+      { status: 500 }
+    );
+  }
+}
