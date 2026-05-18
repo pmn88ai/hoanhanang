@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Khong tim thay" };
   }
 
-  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa";
+  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
   return {
@@ -86,7 +86,7 @@ export default async function ProductPage({ params }: Props) {
   }
 
   const zaloUrl = process.env.NEXT_PUBLIC_ZALO_URL ?? "#";
-  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa";
+  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
 
   const productSchema = {
     "@context": "https://schema.org",

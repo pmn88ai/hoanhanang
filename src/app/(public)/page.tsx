@@ -7,7 +7,7 @@ import FeaturedProducts from "@/components/public/FeaturedProducts";
 import TestimonialsSection from "@/components/public/TestimonialsSection";
 import AboutSection from "@/components/public/AboutSection";
 
-const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cửa hàng hoa";
+const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
 
 export const metadata: Metadata = {
   title: "Trang chu",
@@ -60,7 +60,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection
-        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cửa hàng hoa"}
+        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng"}
         tagline={settings["hero_tagline"] ?? "Hoa tươi - Cảm xúc thật"}
         subTagline={
           settings["hero_sub_tagline"] ??
@@ -74,7 +74,7 @@ export default async function HomePage() {
       <FeaturedProducts products={featuredProducts} />
       <TestimonialsSection />
       <AboutSection
-        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cửa hàng hoa"}
+        shopName={process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng"}
         description={settings["shop_description"]}
         address={process.env.NEXT_PUBLIC_SHOP_ADDRESS}
         phone={process.env.NEXT_PUBLIC_SHOP_PHONE}
