@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES } from "@/config/categories";
 import { slugify } from "@/lib/slug";
+import ImageUploader from "@/components/operator/ImageUploader";
 
 interface FormData {
   title: string;
@@ -32,13 +33,14 @@ export default function ProductForm({
   initialData,
   productId,
 }: {
-  initialData?: Partial<FormData>;
+  initialData?: Partial<FormData> & { images?: string[] };
   productId?: string;
 }) {
   const [form, setForm] = useState<FormData>({
     ...EMPTY_FORM,
     ...initialData,
   });
+  const [images, setImages] = useState<string[]>(initialData?.images ?? []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -67,7 +69,7 @@ export default function ProductForm({
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, status }),
+      body: JSON.stringify({ ...form, status, images }),
     });
 
     if (!res.ok) {
@@ -145,6 +147,14 @@ export default function ProductForm({
           rows={4}
           placeholder="Mo ta chi tiet mau hoa, dip su dung, mau sac..."
         />
+      </div>
+
+      <div>
+        <label className={labelClass}>Anh san pham</label>
+        <ImageUploader images={images} onChange={setImages} />
+        <p className="text-text-muted text-xs mt-1">
+          Anh dau tien se lam anh chinh
+        </p>
       </div>
 
       <div>

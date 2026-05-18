@@ -29,6 +29,7 @@ export async function PUT(
         videoUrl: body.videoUrl || null,
         isFeatured: body.isFeatured ?? false,
         status: body.status ?? "draft",
+        images: body.images ?? [],
         seoTitle: body.seoTitle || null,
         seoDescription: body.seoDescription || null,
       })
