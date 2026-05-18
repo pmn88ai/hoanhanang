@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { products } from "../../../../../database/schema";
 import { eq } from "drizzle-orm";
@@ -7,8 +8,64 @@ import { Phone, ChevronLeft } from "lucide-react";
 import ImageGallery from "@/components/public/ImageGallery";
 import VideoEmbed from "@/components/public/VideoEmbed";
 
+export const revalidate = 60;
+
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  try {
+    const publishedProducts = await db
+      .select({ slug: products.slug })
+      .from(products)
+      .where(eq(products.status, "published"));
+
+    return publishedProducts.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+
+  let product: { title: string; seoTitle: string | null; seoDescription: string | null; priceRange: string | null; images: string[]; slug: string } | null | undefined = null;
+
+  try {
+    product = await db.query.products.findFirst({
+      where: eq(products.slug, slug),
+      columns: { title: true, seoTitle: true, seoDescription: true, priceRange: true, images: true, slug: true },
+    });
+  } catch {
+    // DB unavailable
+  }
+
+  if (!product) {
+    return { title: "Khong tim thay" };
+  }
+
+  const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+
+  return {
+    title: product.seoTitle ?? product.title,
+    description:
+      product.seoDescription ??
+      `${product.title} tai ${shopName}. ${product.priceRange ? `Gia: ${product.priceRange}.` : ""} Dat hoa qua Zalo, giao tan noi.`,
+    openGraph: {
+      title: `${product.title} | ${shopName}`,
+      description: product.seoDescription ?? `${product.title} — hoa tuoi dep, giao tan noi.`,
+      images: product.images[0]
+        ? [{ url: product.images[0], width: 800, height: 800, alt: product.title }]
+        : [],
+      url: `${siteUrl}/mau-hoa/${product.slug}`,
+      type: "website",
+    },
+    alternates: {
+      canonical: `${siteUrl}/mau-hoa/${product.slug}`,
+    },
+  };
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -31,8 +88,32 @@ export default async function ProductPage({ params }: Props) {
   const zaloUrl = process.env.NEXT_PUBLIC_ZALO_URL ?? "#";
   const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Cua hang hoa";
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.description,
+    image: product.images,
+    offers: product.priceRange
+      ? {
+          "@type": "Offer",
+          priceCurrency: "VND",
+          price: product.priceRange,
+          availability: "https://schema.org/InStock",
+          seller: {
+            "@type": "Organization",
+            name: shopName,
+          },
+        }
+      : undefined,
+  };
+
   return (
     <div className="min-h-screen bg-bg-primary">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-text-muted mb-8">

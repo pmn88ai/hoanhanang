@@ -25,7 +25,7 @@ export default function ImageGallery({ images, title }: Props) {
       <div className="aspect-square relative rounded-2xl overflow-hidden bg-bg-secondary mb-3">
         <Image
           src={images[active]}
-          alt={`${title} - ${active + 1}`}
+          alt={`${title} — anh ${active + 1}`}
           fill
           className="object-cover"
           priority
@@ -61,7 +61,7 @@ export default function ImageGallery({ images, title }: Props) {
             >
               <Image
                 src={src}
-                alt={`${i + 1}`}
+                alt={`${title} — thumbnail ${i + 1}`}
                 fill
                 className="object-cover"
                 sizes="64px"
