@@ -37,6 +37,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+push-env.ps1
 
 # Uploads (nếu có local storage sau này)
 uploads/
