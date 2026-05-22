@@ -22,5 +22,5 @@ export const CATEGORY_GROUPS = [
 
 export const CATEGORIES = [
   { value: "tat-ca", label: "Tất cả" },
-  ...CATEGORY_GROUPS.flatMap((g) => g.items),
-] as const;
+  ...CATEGORY_GROUPS.flatMap((g) => [...g.items]),
+];
