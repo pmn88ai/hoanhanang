@@ -27,6 +27,7 @@ export default async function HomePage() {
     slug: string;
     title: string;
     priceRange: string | null;
+    salePrice: string | null;
     images: string[];
     category: string | null;
   }> = [];
@@ -42,6 +43,7 @@ export default async function HomePage() {
           slug: products.slug,
           title: products.title,
           priceRange: products.priceRange,
+          salePrice: products.salePrice,
           images: products.images,
           category: products.category,
         })

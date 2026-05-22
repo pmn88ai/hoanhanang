@@ -31,6 +31,7 @@ export default async function GalleryPage({ searchParams }: Props) {
     slug: string;
     title: string;
     priceRange: string | null;
+    salePrice: string | null;
     images: string[];
     category: string | null;
     isFeatured: boolean;
@@ -43,6 +44,7 @@ export default async function GalleryPage({ searchParams }: Props) {
         slug: products.slug,
         title: products.title,
         priceRange: products.priceRange,
+        salePrice: products.salePrice,
         images: products.images,
         category: products.category,
         isFeatured: products.isFeatured,
@@ -106,6 +108,11 @@ export default async function GalleryPage({ searchParams }: Props) {
                       Nổi bật
                     </span>
                   )}
+                  {product.salePrice && (
+                    <span className="absolute top-2 right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                      Giảm giá
+                    </span>
+                  )}
                 </div>
                 <div className="p-3 md:p-4">
                   <p className="text-xs text-accent mb-1">
@@ -114,11 +121,14 @@ export default async function GalleryPage({ searchParams }: Props) {
                   <h2 className="text-text-primary text-sm font-medium line-clamp-2 leading-snug">
                     {product.title}
                   </h2>
-                  {product.priceRange && (
-                    <p className="text-cta text-sm font-semibold mt-1">
-                      {fmtPrice(product.priceRange)}
-                    </p>
-                  )}
+                  {product.salePrice ? (
+                    <div className="mt-1 space-y-0.5">
+                      <p className="text-red-500 text-sm font-bold">{fmtPrice(product.salePrice)}</p>
+                      <p className="text-text-muted text-xs line-through">{fmtPrice(product.priceRange)}</p>
+                    </div>
+                  ) : product.priceRange ? (
+                    <p className="text-cta text-sm font-semibold mt-1">{fmtPrice(product.priceRange)}</p>
+                  ) : null}
                 </div>
               </Link>
             ))}

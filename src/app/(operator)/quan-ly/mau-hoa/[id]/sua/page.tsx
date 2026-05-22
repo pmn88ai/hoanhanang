@@ -43,6 +43,7 @@ export default async function SuaMauHoaPage({
             title: product.title,
             category: product.category ?? "",
             priceRange: product.priceRange ?? "",
+            salePrice: product.salePrice ?? "",
             description: product.description ?? "",
             videoUrl: product.videoUrl ?? "",
             isFeatured: product.isFeatured,

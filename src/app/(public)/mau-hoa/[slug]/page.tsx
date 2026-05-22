@@ -147,12 +147,24 @@ export default async function ProductPage({ params }: Props) {
                 {product.category}
               </p>
             )}
-            <h1 className="font-serif text-2xl md:text-3xl text-text-primary font-semibold mb-4 leading-tight">
+            <h1 className="font-serif text-2xl md:text-3xl text-text-primary font-semibold mb-3 leading-tight">
               {product.title}
             </h1>
-            {product.priceRange && (
+            {product.salePrice ? (
+              <div className="mb-6">
+                <span className="inline-flex items-center gap-1 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 shadow-sm">
+                  🔥 Đang giảm giá
+                </span>
+                <div className="flex items-baseline gap-3">
+                  <p className="text-2xl text-red-500 font-bold">{fmtPrice(product.salePrice)}</p>
+                  {product.priceRange && (
+                    <p className="text-base text-text-muted line-through">{fmtPrice(product.priceRange)}</p>
+                  )}
+                </div>
+              </div>
+            ) : product.priceRange ? (
               <p className="text-2xl text-cta font-bold mb-6">{fmtPrice(product.priceRange)}</p>
-            )}
+            ) : null}
             {product.description && (
               <div className="text-text-muted text-sm leading-relaxed mb-8 whitespace-pre-line">
                 {product.description}

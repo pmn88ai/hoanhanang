@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
         title: body.title,
         category: body.category || null,
         priceRange: body.priceRange || null,
+        salePrice: body.salePrice || null,
         description: body.description || null,
         videoUrl: body.videoUrl || null,
         isFeatured: body.isFeatured ?? false,

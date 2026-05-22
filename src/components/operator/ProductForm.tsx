@@ -1,14 +1,16 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CATEGORIES } from "@/config/categories";
+import { CATEGORY_GROUPS } from "@/config/categories";
 import { slugify } from "@/lib/slug";
 import ImageUploader from "@/components/operator/ImageUploader";
+import { cn } from "@/lib/utils";
 
 interface FormData {
   title: string;
   category: string;
   priceRange: string;
+  salePrice: string;
   description: string;
   videoUrl: string;
   isFeatured: boolean;
@@ -21,6 +23,7 @@ const EMPTY_FORM: FormData = {
   title: "",
   category: "",
   priceRange: "",
+  salePrice: "",
   description: "",
   videoUrl: "",
   isFeatured: false,
@@ -41,6 +44,7 @@ export default function ProductForm({
     ...initialData,
   });
   const [images, setImages] = useState<string[]>(initialData?.images ?? []);
+  const [hasDiscount, setHasDiscount] = useState(!!initialData?.salePrice);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -120,21 +124,57 @@ export default function ProductForm({
             className={inputClass}
           >
             <option value="">Chon danh muc</option>
-            {CATEGORIES.filter((c) => c.value !== "tat-ca").map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
+            {CATEGORY_GROUPS.map((g) => (
+              <optgroup key={g.group} label={g.group}>
+                {g.items.map((c) => (
+                  <option key={c.value} value={c.value}>{c.label}</option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </div>
-        <div>
-          <label className={labelClass}>Khoang gia</label>
+        <div className="space-y-2">
+          <label className={labelClass}>
+            Gia ban
+            {hasDiscount && (
+              <span className="ml-2 text-xs font-normal text-red-400">
+                (gia goc — hien thi gach cheo)
+              </span>
+            )}
+          </label>
           <input
             value={form.priceRange}
             onChange={set("priceRange")}
-            className={inputClass}
+            className={cn(inputClass, hasDiscount && "line-through text-text-muted")}
             placeholder="Vd: 200.000 - 500.000d"
           />
+          {/* Discount toggle */}
+          <label className="flex items-center gap-2 cursor-pointer select-none w-fit">
+            <input
+              type="checkbox"
+              checked={hasDiscount}
+              onChange={(e) => {
+                setHasDiscount(e.target.checked);
+                if (!e.target.checked)
+                  setForm((f) => ({ ...f, salePrice: "" }));
+              }}
+              className="w-4 h-4 accent-[var(--cta)]"
+            />
+            <span className="text-xs text-text-muted">Co giam gia</span>
+          </label>
+          {hasDiscount && (
+            <div>
+              <input
+                value={form.salePrice}
+                onChange={set("salePrice")}
+                className={cn(inputClass, "border-red-300 focus:border-red-400")}
+                placeholder="Vd: 150.000 - 350.000d"
+              />
+              <p className="text-xs text-red-400 mt-1">
+                Gia giam se hien thi noi bat tren trang san pham
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

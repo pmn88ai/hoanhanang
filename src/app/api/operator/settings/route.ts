@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { siteSettings } from "../../../../../database/schema";
 import { logActivity } from "@/lib/activity-logger";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest) {
@@ -25,6 +26,8 @@ export async function PUT(req: NextRequest) {
 
     await logActivity(session.user.id, 'settings_update', { updatedKeys: Object.keys(body) }, undefined,
       req.headers.get('x-forwarded-for') ?? undefined)
+
+    revalidatePath('/', 'layout')
 
     return NextResponse.json({ success: true });
   } catch {

@@ -1,33 +1,13 @@
-"use client";
-import { useState } from "react";
-
-export default function PublicFooter({
-  logoWidth,
-  logoHeight,
-}: {
-  logoWidth?: number
-  logoHeight?: number
-}) {
-  const [logoFailed, setLogoFailed] = useState(false);
+export default function PublicFooter() {
   const shopName = process.env.NEXT_PUBLIC_SHOP_NAME ?? "Hoa Nhà Nắng";
   const phone = process.env.NEXT_PUBLIC_SHOP_PHONE ?? "";
-  const logoPath = process.env.NEXT_PUBLIC_LOGO_PATH || "/logo.png";
-  const lw = logoWidth ?? 84;
-  const lh = logoHeight ?? 28;
 
   return (
     <footer className="bg-charcoal text-white/70 mt-20">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            {logoPath && !logoFailed ? (
-              <img src={logoPath} alt={shopName} width={lw} height={lh}
-                className="object-contain mb-2"
-                style={{ width: lw, height: lh }}
-                onError={() => setLogoFailed(true)} />
-            ) : (
-              <p className="font-serif text-white text-lg mb-2">{shopName}</p>
-            )}
+            <p className="font-serif text-white text-xl font-semibold mb-2">Hoa Nhà Nắng</p>
             <p className="text-sm">Hoa tươi — Quà tặng ý nghĩa</p>
           </div>
           <div>

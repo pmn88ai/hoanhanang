@@ -30,6 +30,7 @@ export const products = pgTable("products", {
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
   priceRange: varchar("price_range", { length: 100 }),
+  salePrice: varchar("sale_price", { length: 100 }),
   category: varchar("category", { length: 100 }),
   images: jsonb("images").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
   videoUrl: varchar("video_url", { length: 500 }),

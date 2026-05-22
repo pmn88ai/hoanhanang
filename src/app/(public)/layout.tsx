@@ -11,26 +11,12 @@ export default async function PublicLayout({
   children: React.ReactNode
 }) {
   let isEnabled = true
-  let logoWidth = 120
-  let logoHeight = 40
 
   try {
-    const [killSwitch, lwSetting, lhSetting] = await Promise.all([
-      db.query.siteSettings.findFirst({ where: eq(siteSettings.key, 'site_enabled') }),
-      db.query.siteSettings.findFirst({ where: eq(siteSettings.key, 'logo_width') }),
-      db.query.siteSettings.findFirst({ where: eq(siteSettings.key, 'logo_height') }),
-    ])
-
+    const killSwitch = await db.query.siteSettings.findFirst({
+      where: eq(siteSettings.key, 'site_enabled'),
+    })
     isEnabled = killSwitch?.value !== 'false'
-
-    if (lwSetting?.value) {
-      const parsed = parseInt(lwSetting.value, 10)
-      if (!isNaN(parsed) && parsed >= 80 && parsed <= 300) logoWidth = parsed
-    }
-    if (lhSetting?.value) {
-      const parsed = parseInt(lhSetting.value, 10)
-      if (!isNaN(parsed) && parsed >= 32 && parsed <= 120) logoHeight = parsed
-    }
   } catch {
     // DB unavailable — show normal site with defaults
   }
@@ -53,9 +39,9 @@ export default async function PublicLayout({
 
   return (
     <>
-      <PublicHeader logoWidth={logoWidth} logoHeight={logoHeight} />
+      <PublicHeader />
       <main>{children}</main>
-      <PublicFooter logoWidth={logoWidth} logoHeight={logoHeight} />
+      <PublicFooter />
       <ChatWidget />
     </>
   )
