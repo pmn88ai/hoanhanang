@@ -51,8 +51,10 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
+    const errMsg = err instanceof Error ? err.message : String(err);
+    console.error('[products POST]', errMsg);
     return NextResponse.json(
-      { message: "Co loi xay ra. Vui long thu lai." },
+      { message: "Co loi xay ra. Vui long thu lai.", _debug: errMsg },
       { status: 500 }
     );
   }
