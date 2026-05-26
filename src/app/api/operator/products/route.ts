@@ -42,21 +42,16 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(product);
   } catch (err: unknown) {
-    if ((err as { code?: string })?.code === "23505") {
+    const pgCode = (err as { code?: string })?.code
+      ?? (err as { cause?: { code?: string } })?.cause?.code;
+    if (pgCode === "23505") {
       return NextResponse.json(
-        {
-          message:
-            "Ten mau hoa nay da ton tai. Vui long chon ten khac.",
-        },
+        { message: "Ten mau hoa nay da ton tai. Vui long chon ten khac." },
         { status: 409 }
       );
     }
-    const errMsg = err instanceof Error ? err.message : String(err);
-    const cause = (err as { cause?: unknown })?.cause;
-    const causeMsg = cause instanceof Error ? cause.message : String(cause ?? '');
-    console.error('[products POST] err:', errMsg, '| cause:', causeMsg);
     return NextResponse.json(
-      { message: "Co loi xay ra. Vui long thu lai.", _debug: errMsg, _cause: causeMsg },
+      { message: "Co loi xay ra. Vui long thu lai." },
       { status: 500 }
     );
   }

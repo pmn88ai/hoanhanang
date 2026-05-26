@@ -54,7 +54,9 @@ export async function PUT(
 
     return NextResponse.json(product);
   } catch (err: unknown) {
-    if ((err as { code?: string })?.code === "23505") {
+    const pgCode = (err as { code?: string })?.code
+      ?? (err as { cause?: { code?: string } })?.cause?.code;
+    if (pgCode === "23505") {
       return NextResponse.json(
         { message: "Ten mau hoa nay da ton tai. Vui long chon ten khac." },
         { status: 409 }
