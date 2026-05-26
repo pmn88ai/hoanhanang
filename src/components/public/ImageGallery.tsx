@@ -22,12 +22,12 @@ export default function ImageGallery({ images, title }: Props) {
 
   return (
     <div>
-      <div className="aspect-square relative rounded-2xl overflow-hidden bg-bg-secondary mb-3">
+      <div className="aspect-square relative rounded-2xl overflow-hidden bg-white mb-3">
         <Image
           src={images[active]}
           alt={`${title} — anh ${active + 1}`}
           fill
-          className="object-cover"
+          className="object-contain"
           priority
           sizes="(max-width: 768px) 100vw, 50vw"
         />
